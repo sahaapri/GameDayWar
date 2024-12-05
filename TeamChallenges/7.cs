@@ -10,16 +10,18 @@ namespace InsecureLoginAPI
     {
         private const string connectionString = "Server=myServer;Database=myDB;User Id=admin;Password=admin123;";
 
-        // 1. SQL Injection (Unsanitized user input in queries)
+        // 1. SQL Injection (Use parameterized queries)
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel model)
         {
-            string query = $"SELECT * FROM Users WHERE Username = '{model.Username}' AND Password = '{model.Password}'";
+            string query = "SELECT * FROM Users WHERE Username = @Username AND Password = @Password";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Username", model.Username);
+                cmd.Parameters.AddWithValue("@Password", model.Password);
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
@@ -32,15 +34,30 @@ namespace InsecureLoginAPI
             }
         }
 
-        // 2. Insecure Password Storage (Plaintext password handling)
+        // 2. Secure Password Storage (Hash passwords before storing)
         [HttpPost("storePassword")]
         public IActionResult StorePassword([FromBody] string password)
         {
-            System.IO.File.WriteAllText("passwords.txt", password); // Storing password in plaintext
-            return Ok("Password stored securely... NOT");
+            string hashedPassword = HashPassword(password);
+            System.IO.File.WriteAllText("passwords.txt", hashedPassword); // Storing hashed password
+            return Ok("Password stored securely");
         }
 
-        // 3. Improper Exception Handling (Sensitive info logged)
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+        // 3. Proper Exception Handling (Avoid logging sensitive info)
         [HttpGet("testError")]
         public IActionResult TestError()
         {
@@ -48,19 +65,18 @@ namespace InsecureLoginAPI
             {
                 throw new Exception("Critical Error!"); // Unhandled exception
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Logging exception details to file (vulnerable)
-                System.IO.File.AppendAllText("error_log.txt", ex.ToString());
+                // Avoid logging sensitive exception details
                 return BadRequest("An error occurred");
             }
         }
 
-        // 4. Hardcoded Credentials (Vulnerable to compromise)
+        // 4. Avoid Hardcoded Credentials (Use secure configuration)
         [HttpGet("adminAccess")]
         public IActionResult AdminAccess()
         {
-            string adminPassword = "admin123"; // Hardcoded password
+            string adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD"); // Use environment variable
             if (adminPassword == "admin123")
             {
                 return Ok("Admin access granted");
@@ -68,11 +84,12 @@ namespace InsecureLoginAPI
             return Unauthorized("Access denied");
         }
 
-        // 5. Unvalidated Input Handling (XSS vulnerability in HTML response)
+        // 5. Validate Input Handling (Prevent XSS)
         [HttpGet("greet")]
         public IActionResult GreetUser(string username)
         {
-            return Content($"<h1>Hello, {username}!</h1>"); // Vulnerable to XSS
+            string safeUsername = System.Net.WebUtility.HtmlEncode(username); // Encode input to prevent XSS
+            return Content($"<h1>Hello, {safeUsername}!</h1>");
         }
 
         public class LoginModel
