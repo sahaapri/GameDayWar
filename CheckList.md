@@ -12,8 +12,8 @@
 - [ ] Create Web Request
 - [ ] Default Authentication
 - [ ] Delete Directory
-- [ ] Delete File
-- [ ] Delete Order
+- [x] Delete File
+- [x] Delete Order
 - [ ] Download File
 - [ ] Embed User Input In Script
 - [ ] Encrypt With DES
@@ -32,7 +32,7 @@
 - [ ] Insecurely Execute Command
 - [ ] Insecurely Modify Registry
 - [ ] Insecure Modify File Attributes
-- [ ] Is Default Password
+- [x] Is Default Password
 - [ ] Log Exception Directly
 - [ ] Log Sensitive Information
 - [ ] Log User Input To Console
@@ -63,13 +63,13 @@
 - [ ] Write Exception To File
 
 ## Team Challenges
-- [ ] 1
+- [x] 1
 - [ ] 2
 - [ ] 3
 - [ ] 4
-- [ ] 5
+- [x] 5
 - [ ] 6
-- [ ] 7
+- [x] 7
 - [ ] 8
 
 ## Scenario based Challenges
