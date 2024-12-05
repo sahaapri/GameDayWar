@@ -22,6 +22,6 @@ The game day starts with a MCQ challenge followed by this challenge.
 - Each team member must solve at least one of the individual challenges.
 - The entire Team should come together and solve one of the Team challenges.
 - All code must be written during the event.
-- Once you have finished your challenges, mark your completed questions in ** CheckList.md **
+- Once you have finished your challenges, mark your completed questions in [CheckList.md](CheckList.md)
 - Teams must raise the PR of their solutions before the deadline.
 - Have fun and learn as much as possible!
