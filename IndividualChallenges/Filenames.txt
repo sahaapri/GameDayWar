@@ -1,0 +1,60 @@
+Access Admin Panel
+Add User Input To Cookie
+Assign User Input To Inner Html
+Authenticate User
+Authenticate With Hardcoded Password
+Connect With Hardcoded Connection String
+Create Auth Cookie
+Create Tcp Client
+Create Web Request
+Default Authentication
+Delete Directory
+Delete File
+Delete Order
+Download File
+Embed User Input In Script
+Encrypt With DES
+Encrypt With Hardcoded AES Key
+Encrypt With Hardcoded Key
+Execute Script
+Generate Jwt With Hardcoded Secret
+Get Product By Name
+Get User By Username
+Get User Data
+Hardcode Username In Session
+Hash With MD5
+HTML Injection.html
+Insecure Base64 Encryption
+Insecurely Change Directory Access Control
+Insecurely Execute Command
+Insecurely Modify Registry
+Insecure Modify File Attributes
+Is Default Password
+Log Exception Directly
+Log Sensitive Information
+Log User Input To Console
+Make Api Request
+Make Http Client Request
+Open File Stream
+Open Url With User Input
+Perform Unverified Bank Transfer
+Read File From Fixed Directory
+Read File Lines
+Read Log File
+Redirect To Untrusted Site
+Render Input To Response
+Run Command
+Run Power Shell Script
+Save File
+Send Email
+Send Sensitive Data To Untrusted Url
+Set Unlimited Session Timeout
+Store Token In Session
+Swallow Exception
+Throw Generic Exception
+Use Hardcoded Api Key
+Use Hardcoded Secret Key
+Use Hardcoded Windows Identity
+Use Static Token In Cookie
+Wrap User Input In Div
+Write Exception To File
