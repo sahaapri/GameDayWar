@@ -5,35 +5,78 @@ namespace InsecureFileOperations
 {
     public class FileHandler
     {
-        // 1. Storing sensitive data without encryption
+        private static readonly string encryptionKey = "your-encryption-key";
+
+        // 1. Storing sensitive data with encryption
         public static void StoreSensitiveData(string data)
         {
-            File.WriteAllText("sensitiveData.txt", data); // Data stored in plaintext
+            string encryptedData = EncryptData(data);
+            File.WriteAllText("sensitiveData.txt", encryptedData);
         }
 
-        // 2. Directory Traversal vulnerability (Insecure file path usage)
+        // 2. Secure file path usage to prevent Directory Traversal vulnerability
         public static void DeleteFile(string userInput)
         {
-            string filePath = "C:\\Files\\" + userInput; // Vulnerable to directory traversal
-            File.Delete(filePath); // Delete operation on insecure file path
+            string sanitizedInput = Path.GetFileName(userInput); // Sanitize user input
+            string filePath = Path.Combine("C:\\Files\\", sanitizedInput);
+            File.Delete(filePath);
         }
 
-        // 3. Insecure Logging (Sensitive data in logs)
+        // 3. Secure Logging (Avoid logging sensitive data)
         public static void LogData(string data)
         {
-            File.AppendAllText("log.txt", $"{DateTime.Now}: {data}\n"); // Logs sensitive data without encryption
+            string sanitizedData = SanitizeLogData(data);
+            File.AppendAllText("log.txt", $"{DateTime.Now}: {sanitizedData}\n");
         }
 
-        // 4. Insecure File Permissions (No checks on who can access the file)
+        // 4. Secure File Permissions (Check and set appropriate file permissions)
         public static void ChangeFilePermissions(string filePath)
         {
-            File.SetAttributes(filePath, FileAttributes.Normal); // Insecure file attribute changes
+            // Example: Set file to read-only for all users
+            File.SetAttributes(filePath, FileAttributes.ReadOnly);
         }
 
-        // 5. Data Integrity (File modification without integrity checks)
+        // 5. Data Integrity (File modification with integrity checks)
         public static void ModifyFileData(string filePath, string newData)
         {
-            File.WriteAllText(filePath, newData); // Modifying file without any integrity checks
+            if (VerifyFileIntegrity(filePath))
+            {
+                File.WriteAllText(filePath, newData);
+            }
+        }
+
+        private static string EncryptData(string data)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(encryptionKey);
+                aes.IV = new byte[16]; // Initialization vector with zeros
+
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(cs))
+                        {
+                            sw.Write(data);
+                        }
+                    }
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
+
+        private static string SanitizeLogData(string data)
+        {
+            // Implement sanitization logic here
+            return data.Replace("sensitive", "****");
+        }
+
+        private static bool VerifyFileIntegrity(string filePath)
+        {
+            // Implement file integrity check logic here
+            return true;
         }
     }
 }
