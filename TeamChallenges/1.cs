@@ -5,26 +5,27 @@ using System.Web.Http;
 
 namespace VulnerableWebAPI.Controllers
 {
-    [RoutePrefix("api/insecure")]
-    public class InsecureController : ApiController
+    [RoutePrefix("api/secure")]
+    public class SecureController : ApiController
     {
-        // Hardcoded Database Connection String (Vulnerability #3)
-        private readonly string connectionString = "Server=myServer;Database=SensitiveDB;User Id=admin;Password=admin123;";
+        // Secure Database Connection String (Environment Variable)
+        private readonly string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
-        // Insecure endpoint to fetch user data
+        // Secure endpoint to fetch user data
         [HttpGet]
         [Route("getUserData")]
         public IHttpActionResult GetUserData(string userId)
         {
             try
             {
-                // SQL Injection Vulnerability (#1)
-                string query = $"SELECT * FROM Users WHERE UserId = '{userId}'";
+                // Parameterized Query to prevent SQL Injection
+                string query = "SELECT * FROM Users WHERE UserId = @UserId";
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     if (reader.Read())
@@ -42,23 +43,28 @@ namespace VulnerableWebAPI.Controllers
             }
             catch (Exception ex)
             {
-                // Improper Error Handling (#4)
-                return InternalServerError(ex);
+                // Proper Error Handling
+                return InternalServerError(new Exception("An error occurred while fetching user data."));
             }
         }
 
-        // Insecure endpoint to access files
+        // Secure endpoint to access files
         [HttpGet]
         [Route("getFile")]
         public IHttpActionResult GetFile(string fileName)
         {
             try
             {
-                // Insecure Direct Object Reference (#2)
-                string filePath = "C:\\SecureFiles\\" + fileName;
+                // Validate file name to prevent Insecure Direct Object Reference
+                if (string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                {
+                    return BadRequest("Invalid file name.");
+                }
 
-                // Unrestricted File Access (#5)
-                if (File.Exists(filePath))
+                string filePath = Path.Combine("C:\\SecureFiles\\", fileName);
+
+                // Restrict file access to a specific directory
+                if (File.Exists(filePath) && filePath.StartsWith("C:\\SecureFiles\\"))
                 {
                     string content = File.ReadAllText(filePath);
                     return Ok(new { FileName = fileName, Content = content });
@@ -68,19 +74,19 @@ namespace VulnerableWebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                return InternalServerError(new Exception("An error occurred while accessing the file."));
             }
         }
 
-        // Insecure debug endpoint
+        // Secure debug endpoint
         [HttpGet]
         [Route("debug")]
         public IHttpActionResult Debug()
         {
-            // Insecure Configuration (#6)
+            // Secure Configuration
             return Ok(new
             {
-                Environment = "Debug",
+                Environment = "Production",
                 MachineName = Environment.MachineName,
                 Uptime = Environment.TickCount
             });
