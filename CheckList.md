@@ -1,7 +1,7 @@
 # CheckList
 
 ## Individual Challenges
-- [ ] Access Admin Panel
+- [x] Access Admin Panel
 - [ ] Add User Input To Cookie
 - [ ] Assign User Input To Inner Html
 - [ ] Authenticate User
@@ -53,11 +53,11 @@
 - [ ] Send Sensitive Data To Untrusted Url
 - [ ] Set Unlimited Session Timeout
 - [ ] Store Token In Session
-- [ ] Swallow Exception
-- [ ] Throw Generic Exception
-- [ ] Use Hardcoded Api Key
+- [x] Swallow Exception
+- [x] Throw Generic Exception
+- [x] Use Hardcoded Api Key
 - [ ] Use Hardcoded Secret Key
-- [ ] Use Hardcoded Windows Identity
+- [x] Use Hardcoded Windows Identity
 - [ ] Use Static Token In Cookie
 - [ ] Wrap User Input In Div
 - [ ] Write Exception To File
