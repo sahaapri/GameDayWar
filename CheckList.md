@@ -45,7 +45,7 @@
 - [ ] Read File Lines
 - [ ] Read Log File
 - [ ] Redirect To Untrusted Site
-- [ ] Render Input To Response
+- [x] Render Input To Response
 - [ ] Run Command
 - [ ] Run Power Shell Script
 - [ ] Save File
@@ -56,7 +56,7 @@
 - [x] Swallow Exception
 - [x] Throw Generic Exception
 - [x] Use Hardcoded Api Key
-- [ ] Use Hardcoded Secret Key
+- [x] Use Hardcoded Secret Key
 - [x] Use Hardcoded Windows Identity
 - [ ] Use Static Token In Cookie
 - [ ] Wrap User Input In Div
