@@ -1,6 +1,8 @@
 public void UseHardcodedApiKey()
 {
-    string apiKey = "abcdef12345"; // Insecure: Hardcoded API key
+    // fetch key from azure key vault
+    
+    string apiKey = FetchApiKeyFromKeyVault();
     Console.WriteLine("Using API key: " + apiKey);
 
     // Simulate API usage
@@ -8,4 +10,11 @@ public void UseHardcodedApiKey()
     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
     var response = client.GetAsync("https://api.example.com/data").Result;
     Console.WriteLine("Response: " + response.StatusCode);
+}
+
+private void FetchApiKeyFromKeyVault()
+{
+    // Simulate fetching API key from Azure Key Vault
+    // fetching from environment variable for now
+    return Environment.GetEnvironmentVariable("API_KEY");
 }
