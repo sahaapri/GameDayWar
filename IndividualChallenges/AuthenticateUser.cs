@@ -2,7 +2,8 @@ public void AuthenticateUser(string password)
 {
     if (password == "admin123") // Hardcoded password
     {
-        GrantAccess(); // Insecurely grants access
+        AuthenticateUser(username,password);
+        GrantAccess();
     }
     else
     {
