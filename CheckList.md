@@ -4,7 +4,7 @@
 - [x] Access Admin Panel
 - [ ] Add User Input To Cookie
 - [ ] Assign User Input To Inner Html
-- [ ] Authenticate User
+- [x] Authenticate User
 - [ ] Authenticate With Hardcoded Password
 - [ ] Connect With Hardcoded Connection String
 - [ ] Create Auth Cookie
