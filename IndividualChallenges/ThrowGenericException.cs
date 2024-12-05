@@ -6,7 +6,7 @@ public void ThrowGenericException(Exception ex)
     }
     catch (Exception innerEx)
     {
-        throw new Exception("Error: " + innerEx.Message); // Concatenating exception details
+        throw new InvalidOperationException("Error: " + innerEx.Message); // Concatenating exception details
     }
 }
 

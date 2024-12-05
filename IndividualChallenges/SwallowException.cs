@@ -7,6 +7,8 @@ public void SwallowException()
     catch
     {
         // Silently swallow the exception
+        // Log the exception
+        Console.WriteLine($"An error occurred: {ex.Message}");
     }
 }
 

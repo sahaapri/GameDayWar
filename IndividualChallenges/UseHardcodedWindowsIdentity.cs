@@ -1,6 +1,7 @@
 public void UseHardcodedWindowsIdentity()
 {
     // Insecure: Creates a Windows identity with hardcoded credentials
-    WindowsIdentity identity = new WindowsIdentity("Admin");
+    // Uses the current Windows identity instead
+    WindowsIdentity identity = WindowsIdentity.GetCurrent();
     Console.WriteLine("Using Windows identity: " + identity.Name);
 }
